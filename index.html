@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mystery Shopper</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #000000;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #2a2a2a;
+    --border-light: #333333;
+    --orange: #ff5701;
+    --orange-dim: rgba(255,87,1,0.12);
+    --orange-glow: rgba(255,87,1,0.25);
+    --white: #ffffff;
+    --white-80: rgba(255,255,255,0.8);
+    --white-40: rgba(255,255,255,0.4);
+    --white-15: rgba(255,255,255,0.08);
+    --good: #30d158;
+    --bad: #ff453a;
+    --mid: #ffd60a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px; height: 52px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .topbar-brand { display: flex; align-items: center; gap: 10px; }
+  .topbar-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); }
+  .topbar-name { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
+  .topbar-tag { font-size: 11px; color: var(--white-40); font-weight: 400; letter-spacing: 0.3px; text-transform: uppercase; }
+
+  .hero { padding: 56px 24px 40px; max-width: 680px; margin: 0 auto; }
+  .hero-eyebrow { font-size: 12px; font-weight: 500; color: var(--orange); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px; }
+  .hero-title { font-size: 44px; font-weight: 600; letter-spacing: -1.5px; line-height: 1.05; margin-bottom: 12px; }
+  .hero-title span { color: var(--orange); }
+  .hero-sub { font-size: 17px; color: var(--white-40); font-weight: 300; line-height: 1.5; }
+
+  .main { max-width: 680px; margin: 0 auto; padding: 0 24px 80px; }
+
+  .meta-card { background: var(--surface); border-radius: 16px; overflow: hidden; margin-bottom: 24px; border: 1px solid var(--border); }
+  .meta-row { display: flex; align-items: center; padding: 0 20px; height: 56px; border-bottom: 1px solid var(--border); gap: 16px; }
+  .meta-row:last-child { border-bottom: none; }
+  .meta-row-label { font-size: 15px; font-weight: 400; color: var(--white-80); min-width: 130px; flex-shrink: 0; }
+  .meta-row-input { background: transparent; border: none; color: var(--white-40); font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 300; flex: 1; outline: none; text-align: right; }
+  .meta-row-input:focus { color: var(--white); }
+  .meta-row-input::placeholder { color: var(--white-15); }
+
+  .section-label { font-size: 13px; font-weight: 500; color: var(--white-40); text-transform: uppercase; letter-spacing: 0.06em; padding: 0 4px; margin-bottom: 8px; margin-top: 32px; }
+
+  .card { background: var(--surface); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+
+  .item-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid var(--border); gap: 16px; min-height: 60px; }
+  .item-row:last-child { border-bottom: none; }
+  .item-copy { flex: 1; }
+  .item-title { font-size: 15px; font-weight: 400; color: var(--white); line-height: 1.3; }
+  .item-sub { font-size: 12px; color: var(--white-40); margin-top: 3px; line-height: 1.4; }
+
+  .rating { display: flex; gap: 5px; flex-shrink: 0; }
+  .star { width: 30px; height: 30px; border-radius: 8px; background: var(--surface2); border: 1px solid var(--border-light); color: var(--white-40); font-size: 12px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+  .star:active { transform: scale(0.92); }
+  .star.active { background: var(--orange); border-color: var(--orange); color: white; font-weight: 600; }
+
+  .yn { display: flex; background: var(--surface2); border-radius: 8px; padding: 2px; border: 1px solid var(--border-light); flex-shrink: 0; }
+  .yn-btn { padding: 5px 14px; border-radius: 6px; border: none; background: transparent; color: var(--white-40); font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+  .yn-btn.yes.active { background: var(--good); color: #000; }
+  .yn-btn.no.active { background: var(--bad); color: white; }
+
+  .time-pill { background: var(--surface2); border: 1px solid var(--border-light); border-radius: 8px; color: var(--white); font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; padding: 6px 12px; width: 72px; text-align: center; outline: none; transition: border-color 0.2s; flex-shrink: 0; }
+  .time-pill:focus { border-color: var(--orange); }
+  .time-pill::placeholder { color: var(--white-15); }
+
+  .note-area { padding: 16px 20px; border-top: 1px solid var(--border); }
+  .note-area-label { font-size: 12px; font-weight: 500; color: var(--orange); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+  textarea { background: transparent; border: none; color: var(--white-80); font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 300; width: 100%; resize: none; outline: none; min-height: 64px; line-height: 1.6; }
+  textarea::placeholder { color: var(--white-15); }
+
+  .score-panel { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 12px; }
+  .score-panel-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .score-panel-title { font-size: 15px; font-weight: 600; }
+  .score-total-badge { background: var(--orange-dim); border: 1px solid var(--orange-glow); border-radius: 20px; padding: 4px 14px; font-size: 13px; font-weight: 600; color: var(--orange); }
+  .score-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 20px; border-bottom: 1px solid var(--border); }
+  .score-row:last-child { border-bottom: none; }
+  .score-row-label { font-size: 15px; color: var(--white-80); }
+  .score-row-val { font-size: 15px; font-weight: 600; color: var(--white-40); min-width: 32px; text-align: right; }
+  .score-bar-wrap { flex: 1; margin: 0 16px; height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+  .score-bar { height: 100%; border-radius: 2px; background: var(--orange); width: 0%; transition: width 0.4s ease; }
+
+  .vs-panel { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 12px; }
+  .vs-header-row { display: grid; grid-template-columns: 1fr 80px 80px; padding: 12px 20px; border-bottom: 1px solid var(--border); }
+  .vs-header-cell { font-size: 12px; font-weight: 600; color: var(--white-40); text-transform: uppercase; letter-spacing: 0.05em; text-align: center; }
+  .vs-header-cell:first-child { text-align: left; }
+  .vs-data-row { display: grid; grid-template-columns: 1fr 80px 80px; padding: 13px 20px; border-bottom: 1px solid var(--border); align-items: center; }
+  .vs-data-row:last-child { border-bottom: none; }
+  .vs-data-row.total { background: var(--surface2); }
+  .vs-cell { font-size: 15px; color: var(--white-80); }
+  .vs-val { font-size: 15px; font-weight: 600; text-align: center; }
+  .vs-val.athlon { color: var(--good); }
+  .vs-val.comp { color: var(--white-40); }
+
+  .verdict-card { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 12px; }
+  .verdict-title { padding: 16px 20px; font-size: 15px; font-weight: 600; border-bottom: 1px solid var(--border); }
+  .verdict-btns { display: flex; padding: 16px 20px; gap: 10px; }
+  .vbtn { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--border-light); background: var(--surface2); color: var(--white-40); font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.15s; text-align: center; }
+  .vbtn:active { transform: scale(0.96); }
+  .vbtn.sel-sup { background: rgba(48,209,88,0.15); border-color: var(--good); color: var(--good); }
+  .vbtn.sel-par { background: rgba(255,214,10,0.12); border-color: var(--mid); color: var(--mid); }
+  .vbtn.sel-inf { background: rgba(255,69,58,0.12); border-color: var(--bad); color: var(--bad); }
+
+  .save-area { padding: 32px 0 0; }
+  .save-btn { background: var(--orange); border: none; border-radius: 14px; color: white; font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 600; padding: 18px 0; width: 100%; cursor: pointer; letter-spacing: -0.3px; transition: all 0.2s; }
+  .save-btn:active { transform: scale(0.97); opacity: 0.9; }
+  .save-btn:disabled { opacity: 0.5; }
+  .save-btn.saved { background: var(--good); }
+  .save-btn.error { background: var(--bad); }
+
+  @media (max-width: 480px) {
+    .hero-title { font-size: 34px; }
+    .rating .star { width: 26px; height: 26px; font-size: 11px; }
+    .verdict-btns { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-dot"></div>
+    <span class="topbar-name">Mystery Shopper</span>
+  </div>
+  <span class="topbar-tag">Gym Audit</span>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">Competitive Intelligence</div>
+  <h1 class="hero-title">Analisi<br><span>sul campo.</span></h1>
+  <p class="hero-sub">Valuta ogni club Gym Nation con dati precisi e comparabili.</p>
+</div>
+
+<div class="main">
+
+  <div class="section-label">Dettagli visita</div>
+  <div class="meta-card">
+    <div class="meta-row"><span class="meta-row-label">Club</span><input class="meta-row-input" type="text" placeholder="es. Orange Torino Centro" id="f-club"></div>
+    <div class="meta-row"><span class="meta-row-label">Brand</span><input class="meta-row-input" type="text" placeholder="Orange / Palestre Italiane / Prime" id="f-brand"></div>
+    <div class="meta-row"><span class="meta-row-label">Data</span><input class="meta-row-input" type="text" placeholder="gg/mm/aaaa" id="f-data"></div>
+    <div class="meta-row"><span class="meta-row-label">Orario</span><input class="meta-row-input" type="text" placeholder="es. 18:30" id="f-orario"></div>
+    <div class="meta-row"><span class="meta-row-label">Profilo</span><input class="meta-row-input" type="text" placeholder="Coppia / Solo / Con amico" id="f-profilo"></div>
+  </div>
+
+  <div class="section-label">01 — Accoglienza & Vendita</div>
+  <div class="card">
+    <div class="item-row"><div class="item-copy"><div class="item-title">Minuti prima di essere approcciato</div></div><input class="time-pill" type="text" placeholder="min" id="t-attesa"></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Qualità del primo approccio</div><div class="item-sub">Proattivo, caldo, professionale?</div></div><div class="rating" data-id="r1"><button class="star" onclick="rate(this,'r1',1)">1</button><button class="star" onclick="rate(this,'r1',2)">2</button><button class="star" onclick="rate(this,'r1',3)">3</button><button class="star" onclick="rate(this,'r1',4)">4</button><button class="star" onclick="rate(this,'r1',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Tour della struttura proposto</div></div><div class="yn"><button class="yn-btn yes" onclick="toggle(this)">Sì</button><button class="yn-btn no" onclick="toggle(this)">No</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Conoscenza prodotto e prezzi</div></div><div class="rating" data-id="r2"><button class="star" onclick="rate(this,'r2',1)">1</button><button class="star" onclick="rate(this,'r2',2)">2</button><button class="star" onclick="rate(this,'r2',3)">3</button><button class="star" onclick="rate(this,'r2',4)">4</button><button class="star" onclick="rate(this,'r2',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Prova gratuita offerta</div></div><div class="yn"><button class="yn-btn yes" onclick="toggle(this)">Sì</button><button class="yn-btn no" onclick="toggle(this)">No</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Personalizzazione dell'offerta</div><div class="item-sub">Hanno ascoltato le tue esigenze?</div></div><div class="rating" data-id="r3"><button class="star" onclick="rate(this,'r3',1)">1</button><button class="star" onclick="rate(this,'r3',2)">2</button><button class="star" onclick="rate(this,'r3',3)">3</button><button class="star" onclick="rate(this,'r3',4)">4</button><button class="star" onclick="rate(this,'r3',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Follow-up entro 24 ore</div></div><div class="yn"><button class="yn-btn yes" onclick="toggle(this)">Sì</button><button class="yn-btn no" onclick="toggle(this)">No</button></div></div>
+    <div class="note-area"><div class="note-area-label">Note</div><textarea id="n-acc" placeholder="Frasi usate, atteggiamento, episodi specifici…" rows="3"></textarea></div>
+  </div>
+
+  <div class="section-label">02 — Digitale & Onboarding</div>
+  <div class="card">
+    <div class="item-row"><div class="item-copy"><div class="item-title">Iscrizione 100% digitale</div></div><div class="yn"><button class="yn-btn yes" onclick="toggle(this)">Sì</button><button class="yn-btn no" onclick="toggle(this)">No</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Minuti per completare l'iscrizione</div></div><input class="time-pill" type="text" placeholder="min" id="t-iscrizione"></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">App mostrata e funzionante</div><div class="item-sub">La usano durante la visita?</div></div><div class="rating" data-id="r4"><button class="star" onclick="rate(this,'r4',1)">1</button><button class="star" onclick="rate(this,'r4',2)">2</button><button class="star" onclick="rate(this,'r4',3)">3</button><button class="star" onclick="rate(this,'r4',4)">4</button><button class="star" onclick="rate(this,'r4',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Pagamenti digitali</div><div class="item-sub">Solo carta/RID o accettano contanti?</div></div><div class="rating" data-id="r5"><button class="star" onclick="rate(this,'r5',1)">1</button><button class="star" onclick="rate(this,'r5',2)">2</button><button class="star" onclick="rate(this,'r5',3)">3</button><button class="star" onclick="rate(this,'r5',4)">4</button><button class="star" onclick="rate(this,'r5',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Comunicazione post-visita</div><div class="item-sub">WhatsApp automation, email o silenzio?</div></div><div class="rating" data-id="r6"><button class="star" onclick="rate(this,'r6',1)">1</button><button class="star" onclick="rate(this,'r6',2)">2</button><button class="star" onclick="rate(this,'r6',3)">3</button><button class="star" onclick="rate(this,'r6',4)">4</button><button class="star" onclick="rate(this,'r6',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Totem / check-in senza bancone</div></div><div class="yn"><button class="yn-btn yes" onclick="toggle(this)">Sì</button><button class="yn-btn no" onclick="toggle(this)">No</button></div></div>
+    <div class="note-area"><div class="note-area-label">Note</div><textarea id="n-dig" placeholder="CRM visibile, gestionale, strumenti digitali…" rows="3"></textarea></div>
+  </div>
+
+  <div class="section-label">03 — Qualità Operativa</div>
+  <div class="card">
+    <div class="item-row"><div class="item-copy"><div class="item-title">Pulizia spazi comuni</div></div><div class="rating" data-id="r7"><button class="star" onclick="rate(this,'r7',1)">1</button><button class="star" onclick="rate(this,'r7',2)">2</button><button class="star" onclick="rate(this,'r7',3)">3</button><button class="star" onclick="rate(this,'r7',4)">4</button><button class="star" onclick="rate(this,'r7',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Pulizia spogliatoi e docce</div></div><div class="rating" data-id="r8"><button class="star" onclick="rate(this,'r8',1)">1</button><button class="star" onclick="rate(this,'r8',2)">2</button><button class="star" onclick="rate(this,'r8',3)">3</button><button class="star" onclick="rate(this,'r8',4)">4</button><button class="star" onclick="rate(this,'r8',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Stato attrezzature</div></div><div class="rating" data-id="r9"><button class="star" onclick="rate(this,'r9',1)">1</button><button class="star" onclick="rate(this,'r9',2)">2</button><button class="star" onclick="rate(this,'r9',3)">3</button><button class="star" onclick="rate(this,'r9',4)">4</button><button class="star" onclick="rate(this,'r9',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Gestione affollamento</div></div><div class="rating" data-id="r10"><button class="star" onclick="rate(this,'r10',1)">1</button><button class="star" onclick="rate(this,'r10',2)">2</button><button class="star" onclick="rate(this,'r10',3)">3</button><button class="star" onclick="rate(this,'r10',4)">4</button><button class="star" onclick="rate(this,'r10',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Piscina — se presente</div></div><div class="rating" data-id="r11"><button class="star" onclick="rate(this,'r11',1)">1</button><button class="star" onclick="rate(this,'r11',2)">2</button><button class="star" onclick="rate(this,'r11',3)">3</button><button class="star" onclick="rate(this,'r11',4)">4</button><button class="star" onclick="rate(this,'r11',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Staff presente e attivo in sala</div></div><div class="rating" data-id="r12"><button class="star" onclick="rate(this,'r12',1)">1</button><button class="star" onclick="rate(this,'r12',2)">2</button><button class="star" onclick="rate(this,'r12',3)">3</button><button class="star" onclick="rate(this,'r12',4)">4</button><button class="star" onclick="rate(this,'r12',5)">5</button></div></div>
+    <div class="note-area"><div class="note-area-label">Note</div><textarea id="n-op" placeholder="Problemi specifici, attrezzature mancanti…" rows="3"></textarea></div>
+  </div>
+
+  <div class="section-label">04 — Personale & Customer Experience</div>
+  <div class="card">
+    <div class="item-row"><div class="item-copy"><div class="item-title">Atteggiamento generale</div><div class="item-sub">Sorrisi, disponibilità, energia</div></div><div class="rating" data-id="r13"><button class="star" onclick="rate(this,'r13',1)">1</button><button class="star" onclick="rate(this,'r13',2)">2</button><button class="star" onclick="rate(this,'r13',3)">3</button><button class="star" onclick="rate(this,'r13',4)">4</button><button class="star" onclick="rate(this,'r13',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Competenza tecnica</div></div><div class="rating" data-id="r14"><button class="star" onclick="rate(this,'r14',1)">1</button><button class="star" onclick="rate(this,'r14',2)">2</button><button class="star" onclick="rate(this,'r14',3)">3</button><button class="star" onclick="rate(this,'r14',4)">4</button><button class="star" onclick="rate(this,'r14',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Gestione obiezione disdetta</div><div class="item-sub">Trasparenza o evasione?</div></div><div class="rating" data-id="r15"><button class="star" onclick="rate(this,'r15',1)">1</button><button class="star" onclick="rate(this,'r15',2)">2</button><button class="star" onclick="rate(this,'r15',3)">3</button><button class="star" onclick="rate(this,'r15',4)">4</button><button class="star" onclick="rate(this,'r15',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Senso di comunità e familiarità</div></div><div class="rating" data-id="r16"><button class="star" onclick="rate(this,'r16',1)">1</button><button class="star" onclick="rate(this,'r16',2)">2</button><button class="star" onclick="rate(this,'r16',3)">3</button><button class="star" onclick="rate(this,'r16',4)">4</button><button class="star" onclick="rate(this,'r16',5)">5</button></div></div>
+    <div class="note-area"><div class="note-area-label">Note</div><textarea id="n-per" placeholder="Episodi specifici, frasi notevoli…" rows="3"></textarea></div>
+  </div>
+
+  <div class="section-label">05 — Test Specifici</div>
+  <div class="card">
+    <div class="item-row"><div class="item-copy"><div class="item-title">Info piscina / scuola nuoto</div></div><div class="rating" data-id="r17"><button class="star" onclick="rate(this,'r17',1)">1</button><button class="star" onclick="rate(this,'r17',2)">2</button><button class="star" onclick="rate(this,'r17',3)">3</button><button class="star" onclick="rate(this,'r17',4)">4</button><button class="star" onclick="rate(this,'r17',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Pagamento in contanti</div></div><div class="yn"><button class="yn-btn yes" onclick="toggle(this)">Accettano</button><button class="yn-btn no" onclick="toggle(this)">No cash</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Gestione reclamo simulato</div></div><div class="rating" data-id="r18"><button class="star" onclick="rate(this,'r18',1)">1</button><button class="star" onclick="rate(this,'r18',2)">2</button><button class="star" onclick="rate(this,'r18',3)">3</button><button class="star" onclick="rate(this,'r18',4)">4</button><button class="star" onclick="rate(this,'r18',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Consapevolezza brand Gym Nation</div></div><div class="rating" data-id="r19"><button class="star" onclick="rate(this,'r19',1)">1</button><button class="star" onclick="rate(this,'r19',2)">2</button><button class="star" onclick="rate(this,'r19',3)">3</button><button class="star" onclick="rate(this,'r19',4)">4</button><button class="star" onclick="rate(this,'r19',5)">5</button></div></div>
+    <div class="note-area"><div class="note-area-label">Note</div><textarea id="n-test" placeholder="Reazioni, risposte verbatim…" rows="3"></textarea></div>
+  </div>
+
+  <div class="section-label">Punteggi</div>
+  <div class="score-panel">
+    <div class="score-panel-header">
+      <span class="score-panel-title">Score per area</span>
+      <span class="score-total-badge" id="stot-badge">— /5</span>
+    </div>
+    <div class="score-row"><span class="score-row-label">Accoglienza</span><div class="score-bar-wrap"><div class="score-bar" id="bar1"></div></div><span class="score-row-val" id="s1">—</span></div>
+    <div class="score-row"><span class="score-row-label">Digitale</span><div class="score-bar-wrap"><div class="score-bar" id="bar2"></div></div><span class="score-row-val" id="s2">—</span></div>
+    <div class="score-row"><span class="score-row-label">Operativo</span><div class="score-bar-wrap"><div class="score-bar" id="bar3"></div></div><span class="score-row-val" id="s3">—</span></div>
+    <div class="score-row"><span class="score-row-label">Personale</span><div class="score-bar-wrap"><div class="score-bar" id="bar4"></div></div><span class="score-row-val" id="s4">—</span></div>
+    <div class="score-row"><span class="score-row-label">Test speciali</span><div class="score-bar-wrap"><div class="score-bar" id="bar5"></div></div><span class="score-row-val" id="s5">—</span></div>
+  </div>
+
+  <div class="section-label">Confronto vs Athlon</div>
+  <div class="vs-panel">
+    <div class="vs-header-row"><div class="vs-header-cell">Area</div><div class="vs-header-cell">Athlon</div><div class="vs-header-cell">Questo club</div></div>
+    <div class="vs-data-row"><span class="vs-cell">Accoglienza</span><span class="vs-val athlon">5.0</span><span class="vs-val comp" id="vs1">—</span></div>
+    <div class="vs-data-row"><span class="vs-cell">Digitale</span><span class="vs-val athlon">5.0</span><span class="vs-val comp" id="vs2">—</span></div>
+    <div class="vs-data-row"><span class="vs-cell">Operativo</span><span class="vs-val athlon">5.0</span><span class="vs-val comp" id="vs3">—</span></div>
+    <div class="vs-data-row"><span class="vs-cell">Personale</span><span class="vs-val athlon">5.0</span><span class="vs-val comp" id="vs4">—</span></div>
+    <div class="vs-data-row total"><span class="vs-cell" style="font-weight:600">Totale</span><span class="vs-val athlon">5.0</span><span class="vs-val comp" id="vstot">—</span></div>
+  </div>
+
+  <div class="section-label">Verdetto</div>
+  <div class="verdict-card">
+    <div class="verdict-title">Rispetto ad Athlon questo club è</div>
+    <div class="verdict-btns">
+      <button class="vbtn" onclick="setVerdict(this,'sup')">↑ Superiore</button>
+      <button class="vbtn" onclick="setVerdict(this,'par')">= Pari</button>
+      <button class="vbtn" onclick="setVerdict(this,'inf')">↓ Inferiore</button>
+    </div>
+  </div>
+
+  <div class="section-label">Sintesi finale</div>
+  <div class="card">
+    <div class="note-area" style="border-top:none"><div class="note-area-label">Top 3 debolezze</div><textarea id="n-deb" placeholder="1. &#10;2. &#10;3. " rows="4"></textarea></div>
+    <div class="note-area"><div class="note-area-label">Top 3 punti di forza</div><textarea id="n-for" placeholder="1. &#10;2. &#10;3. " rows="4"></textarea></div>
+    <div class="note-area"><div class="note-area-label">Opportunità CDO</div><textarea id="n-cdo" placeholder="Cosa migliorerei subito se entrassi in questo club?" rows="4"></textarea></div>
+    <div class="note-area"><div class="note-area-label">Note libere</div><textarea id="n-lib" placeholder="Tutto quello che non rientra nelle categorie sopra…" rows="3"></textarea></div>
+  </div>
+
+  <div class="save-area">
+    <button class="save-btn" id="saveBtn" onclick="saveToN8n()">Salva in n8n</button>
+  </div>
+
+</div>
+
+<script>
+const WEBHOOK_URL = 'https://automazione.n8ndevelop.it/webhook/mystery-shopper';
+const scores = {};
+
+function rate(btn, id, val) {
+  btn.closest('.rating').querySelectorAll('.star').forEach((s,i) => s.classList.toggle('active', i < val));
+  scores[id] = val;
+  updateScores();
+}
+
+function toggle(btn) {
+  btn.closest('.yn').querySelectorAll('.yn-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function setVerdict(btn, type) {
+  document.querySelectorAll('.vbtn').forEach(b => b.className = 'vbtn');
+  btn.classList.add('sel-' + type);
+}
+
+function avg(keys) {
+  const vals = keys.map(k => scores[k]).filter(v => v !== undefined);
+  if (!vals.length) return null;
+  return (vals.reduce((a,b) => a+b,0) / vals.length).toFixed(1);
+}
+
+function col(v) {
+  if (!v) return 'var(--white-40)';
+  const n = parseFloat(v);
+  return n >= 4 ? 'var(--good)' : n >= 3 ? 'var(--mid)' : 'var(--bad)';
+}
+
+function updateScores() {
+  const a = [
+    avg(['r1','r2','r3']),
+    avg(['r4','r5','r6']),
+    avg(['r7','r8','r9','r10','r11','r12']),
+    avg(['r13','r14','r15','r16']),
+    avg(['r17','r18','r19'])
+  ];
+  a.forEach((v, i) => {
+    const n = i + 1;
+    document.getElementById('s'+n).textContent = v || '—';
+    document.getElementById('bar'+n).style.width = v ? (parseFloat(v)/5*100)+'%' : '0%';
+    const vs = document.getElementById('vs'+n);
+    if (vs) { vs.textContent = v || '—'; vs.style.color = col(v); }
+  });
+  const all = a.filter(v => v !== null).map(Number);
+  if (all.length) {
+    const t = (all.reduce((a,b)=>a+b,0)/all.length).toFixed(1);
+    document.getElementById('stot-badge').textContent = t + ' /5';
+    document.getElementById('vstot').textContent = t;
+    document.getElementById('vstot').style.color = col(t);
+  }
+}
+
+async function saveToN8n() {
+  const btn = document.getElementById('saveBtn');
+  btn.textContent = 'Salvataggio…';
+  btn.disabled = true;
+  const v = document.querySelector('.vbtn.sel-sup') ? 'Superiore' : document.querySelector('.vbtn.sel-par') ? 'Pari' : document.querySelector('.vbtn.sel-inf') ? 'Inferiore' : '';
+  const p = {
+    club: document.getElementById('f-club').value,
+    brand: document.getElementById('f-brand').value,
+    data_visita: document.getElementById('f-data').value,
+    orario: document.getElementById('f-orario').value,
+    profilo: document.getElementById('f-profilo').value,
+    score_accoglienza: parseFloat(document.getElementById('s1').textContent)||null,
+    score_digitale: parseFloat(document.getElementById('s2').textContent)||null,
+    score_operativo: parseFloat(document.getElementById('s3').textContent)||null,
+    score_personale: parseFloat(document.getElementById('s4').textContent)||null,
+    score_test_speciali: parseFloat(document.getElementById('s5').textContent)||null,
+    score_totale: parseFloat(document.getElementById('vstot').textContent)||null,
+    verdetto: v,
+    note_accoglienza: document.getElementById('n-acc').value,
+    note_digitale: document.getElementById('n-dig').value,
+    note_operative: document.getElementById('n-op').value,
+    note_personale: document.getElementById('n-per').value,
+    top3_debolezze: document.getElementById('n-deb').value,
+    top3_forze: document.getElementById('n-for').value,
+    opportunita_cdo: document.getElementById('n-cdo').value,
+    note_libere: document.getElementById('n-lib').value
+  };
+  try {
+    const r = await fetch(WEBHOOK_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(p) });
+    if (r.ok) { btn.classList.add('saved'); btn.textContent = '✓ Salvato in n8n'; }
+    else throw new Error();
+  } catch { btn.classList.add('error'); btn.textContent = '✗ Errore — riprova'; btn.disabled = false; }
+}
+</script>
+</body>
+</html>
