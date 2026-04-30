@@ -64,6 +64,11 @@
   .meta-row-input { background: transparent; border: none; color: var(--white); font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 300; flex: 1; outline: none; text-align: right; }
   .meta-row-input:focus { color: var(--white); }
   .meta-row-input::placeholder { color: var(--white-40); }
+  .meta-row-input[type="date"],
+  .meta-row-input[type="time"] {
+    color: var(--white);
+    color-scheme: dark;
+  }
 
   .section-label { font-size: 13px; font-weight: 500; color: var(--white-40); text-transform: uppercase; letter-spacing: 0.06em; padding: 0 4px; margin-bottom: 8px; margin-top: 32px; }
 
@@ -162,8 +167,8 @@
   <div class="meta-card">
     <div class="meta-row"><span class="meta-row-label">Club</span><input class="meta-row-input" type="text" placeholder="es. Orange Torino Centro" id="f-club"></div>
     <div class="meta-row"><span class="meta-row-label">Brand</span><input class="meta-row-input" type="text" placeholder="Orange / Palestre Italiane / Prime" id="f-brand"></div>
-    <div class="meta-row"><span class="meta-row-label">Data</span><input class="meta-row-input" type="text" placeholder="gg/mm/aaaa" id="f-data"></div>
-    <div class="meta-row"><span class="meta-row-label">Orario</span><input class="meta-row-input" type="text" placeholder="es. 18:30" id="f-orario"></div>
+    <div class="meta-row"><span class="meta-row-label">Data</span><input class="meta-row-input" type="date" id="f-data"></div>
+    <div class="meta-row"><span class="meta-row-label">Orario</span><input class="meta-row-input" type="time" id="f-orario"></div>
     <div class="meta-row"><span class="meta-row-label">Profilo</span><input class="meta-row-input" type="text" placeholder="Coppia / Solo / Con amico" id="f-profilo"></div>
   </div>
 
