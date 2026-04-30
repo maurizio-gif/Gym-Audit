@@ -16,9 +16,9 @@
     --orange-dim: rgba(255,87,1,0.12);
     --orange-glow: rgba(255,87,1,0.25);
     --white: #ffffff;
-    --white-80: rgba(255,255,255,0.8);
-    --white-40: rgba(255,255,255,0.4);
-    --white-15: rgba(255,255,255,0.08);
+    --white-80: #ffffff;
+    --white-40: rgba(255,255,255,0.6);
+    --white-15: rgba(255,255,255,0.35);
     --good: #30d158;
     --bad: #ff453a;
     --mid: #ffd60a;
@@ -61,9 +61,9 @@
   .meta-row { display: flex; align-items: center; padding: 0 20px; height: 56px; border-bottom: 1px solid var(--border); gap: 16px; }
   .meta-row:last-child { border-bottom: none; }
   .meta-row-label { font-size: 15px; font-weight: 400; color: var(--white-80); min-width: 130px; flex-shrink: 0; }
-  .meta-row-input { background: transparent; border: none; color: var(--white-40); font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 300; flex: 1; outline: none; text-align: right; }
+  .meta-row-input { background: transparent; border: none; color: var(--white); font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 300; flex: 1; outline: none; text-align: right; }
   .meta-row-input:focus { color: var(--white); }
-  .meta-row-input::placeholder { color: var(--white-15); }
+  .meta-row-input::placeholder { color: var(--white-40); }
 
   .section-label { font-size: 13px; font-weight: 500; color: var(--white-40); text-transform: uppercase; letter-spacing: 0.06em; padding: 0 4px; margin-bottom: 8px; margin-top: 32px; }
 
@@ -87,12 +87,12 @@
 
   .time-pill { background: var(--surface2); border: 1px solid var(--border-light); border-radius: 8px; color: var(--white); font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; padding: 6px 12px; width: 72px; text-align: center; outline: none; transition: border-color 0.2s; flex-shrink: 0; }
   .time-pill:focus { border-color: var(--orange); }
-  .time-pill::placeholder { color: var(--white-15); }
+  .time-pill::placeholder { color: var(--white-40); }
 
   .note-area { padding: 16px 20px; border-top: 1px solid var(--border); }
   .note-area-label { font-size: 12px; font-weight: 500; color: var(--orange); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
-  textarea { background: transparent; border: none; color: var(--white-80); font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 300; width: 100%; resize: none; outline: none; min-height: 64px; line-height: 1.6; }
-  textarea::placeholder { color: var(--white-15); }
+  textarea { background: transparent; border: none; color: var(--white); font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 300; width: 100%; resize: none; outline: none; min-height: 64px; line-height: 1.6; }
+  textarea::placeholder { color: var(--white-40); }
 
   .score-panel { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 12px; }
   .score-panel-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
@@ -153,7 +153,7 @@
 <div class="hero">
   <div class="hero-eyebrow">Competitive Intelligence</div>
   <h1 class="hero-title">Analisi<br><span>sul campo.</span></h1>
-  <p class="hero-sub">Valuta ogni club Gym Nation con dati precisi e comparabili.</p>
+  <p class="hero-sub">Valuta ogni club con dati precisi e comparabili.</p>
 </div>
 
 <div class="main">
@@ -215,7 +215,7 @@
     <div class="item-row"><div class="item-copy"><div class="item-title">Info piscina / scuola nuoto</div></div><div class="rating" data-id="r17"><button class="star" onclick="rate(this,'r17',1)">1</button><button class="star" onclick="rate(this,'r17',2)">2</button><button class="star" onclick="rate(this,'r17',3)">3</button><button class="star" onclick="rate(this,'r17',4)">4</button><button class="star" onclick="rate(this,'r17',5)">5</button></div></div>
     <div class="item-row"><div class="item-copy"><div class="item-title">Pagamento in contanti</div></div><div class="yn"><button class="yn-btn yes" onclick="toggle(this)">Accettano</button><button class="yn-btn no" onclick="toggle(this)">No cash</button></div></div>
     <div class="item-row"><div class="item-copy"><div class="item-title">Gestione reclamo simulato</div></div><div class="rating" data-id="r18"><button class="star" onclick="rate(this,'r18',1)">1</button><button class="star" onclick="rate(this,'r18',2)">2</button><button class="star" onclick="rate(this,'r18',3)">3</button><button class="star" onclick="rate(this,'r18',4)">4</button><button class="star" onclick="rate(this,'r18',5)">5</button></div></div>
-    <div class="item-row"><div class="item-copy"><div class="item-title">Consapevolezza brand Gym Nation</div></div><div class="rating" data-id="r19"><button class="star" onclick="rate(this,'r19',1)">1</button><button class="star" onclick="rate(this,'r19',2)">2</button><button class="star" onclick="rate(this,'r19',3)">3</button><button class="star" onclick="rate(this,'r19',4)">4</button><button class="star" onclick="rate(this,'r19',5)">5</button></div></div>
+    <div class="item-row"><div class="item-copy"><div class="item-title">Consapevolezza del cambio gestione</div></div><div class="rating" data-id="r19"><button class="star" onclick="rate(this,'r19',1)">1</button><button class="star" onclick="rate(this,'r19',2)">2</button><button class="star" onclick="rate(this,'r19',3)">3</button><button class="star" onclick="rate(this,'r19',4)">4</button><button class="star" onclick="rate(this,'r19',5)">5</button></div></div>
     <div class="note-area"><div class="note-area-label">Note</div><textarea id="n-test" placeholder="Reazioni, risposte verbatim…" rows="3"></textarea></div>
   </div>
 
